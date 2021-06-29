@@ -113,7 +113,18 @@ public class TOS737800 extends JFrame {
 	
 	private static void reset() {
 		
+		spinner[0].setValue( 20 );
+		spinner[1].setValue( 29.92 );
+		spinner[2].setValue( 0 );
+		spinner[3].setValue( 6500 );
+		spinner[4].setValue( 35000 );
 		
+		combos[0].setSelectedItem( flpsPos[0] );
+		checks[0].setSelected( false );
+		
+		speeds[0].setText( "" );
+		speeds[1].setText( "" );
+		speeds[2].setText( "" );
 		
 	}
 	
@@ -181,16 +192,19 @@ public class TOS737800 extends JFrame {
 		// build output fields
 		
 		speeds[0] = new JTextField();
+		speeds[0].setEditable( false );
 		speeds[0].setBackground( new Color( 255, 180, 180 ) );
 		
 		speeds[1] = new JTextField();
+		speeds[1].setEditable( false );
 		speeds[1].setBackground( new Color( 140, 220, 140 ) );
 		
 		speeds[2] = new JTextField();
+		speeds[2].setEditable( false );
 		speeds[2].setBackground( new Color( 255, 255, 140 ) );
 		
-		JButton calcNow = new JButton( "calculate" );
-		JButton restNow = new JButton( "reset" );
+		JButton calcBtn = new JButton( "calculate" );
+		JButton resetBtn = new JButton( "reset" );
 		
 		// build output panel
 		
@@ -205,8 +219,8 @@ public class TOS737800 extends JFrame {
 		output.add( new JLabel( "<html>v<sub>2</sub></html>" ) );
 		output.add( speeds[2] );
 		
-		output.add( calcNow );
-		output.add( restNow );
+		output.add( calcBtn );
+		output.add( resetBtn );
 		
 		for( int i = 0; i < 6; i++ ) {
 			output.add( new JLabel( " " ) );
@@ -231,7 +245,19 @@ public class TOS737800 extends JFrame {
 		
 		// action listener
 		
-		readme.addActionListener( e-> {
+		reset.addActionListener( e -> {
+			
+			reset();
+			
+		} );
+		
+		resetBtn.addActionListener( e -> {
+			
+			reset();
+			
+		} );
+		
+		readme.addActionListener( e -> {
 			
 			try {
 				
@@ -241,7 +267,7 @@ public class TOS737800 extends JFrame {
 			
 		} );
 		
-		code.addActionListener( e-> {
+		code.addActionListener( e -> {
 			
 			try {
 				
@@ -251,7 +277,7 @@ public class TOS737800 extends JFrame {
 			
 		} );
 		
-		donate.addActionListener( e-> {
+		donate.addActionListener( e -> {
 			
 			try {
 				
@@ -268,6 +294,8 @@ public class TOS737800 extends JFrame {
 		} );
 		
 		// build frame
+		
+		reset();
 		
 		frame.setTitle( "Boeing 737-800 take off speed calculator" );
 		frame.setDefaultCloseOperation( frame.EXIT_ON_CLOSE );
