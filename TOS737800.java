@@ -1,3 +1,6 @@
+import java.awt.Desktop;
+import java.net.URI;
+import java.util.Scanner;
 import javax.swing.*;
 
 public class TOS737800 extends JFrame {
@@ -124,6 +127,44 @@ public class TOS737800 extends JFrame {
 		mbar.add( menu );
 		
 		frame.setJMenuBar( mbar );
+		
+		// action listener
+		
+		help.addActionListener( e-> {
+			
+			try {
+				
+				Desktop.getDesktop().browse( new URI( "https://github.com/komed3/tos-737-800/blob/main/README.md" ) );
+				
+			} catch( Exception except ) {}
+			
+		} );
+		
+		code.addActionListener( e-> {
+			
+			try {
+				
+				Desktop.getDesktop().browse( new URI( "https://github.com/komed3/tos-737-800/" ) );
+				
+			} catch( Exception except ) {}
+			
+		} );
+		
+		donate.addActionListener( e-> {
+			
+			try {
+				
+				Desktop.getDesktop().browse( new URI( "https://paypal.me/komed3/" ) );
+				
+			} catch( Exception except ) {}
+			
+		} );
+		
+		close.addActionListener( e -> {
+			
+			frame.dispose();
+			
+		} );
 		
 		// build frame
 		
