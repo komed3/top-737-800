@@ -1,7 +1,7 @@
-import java.awt.Desktop;
-import java.net.URI;
-import java.util.Scanner;
 import javax.swing.*;
+import java.awt.*;
+import java.util.Scanner;
+import java.net.URI;
 
 public class TOS737800 extends JFrame {
 	
@@ -128,6 +128,37 @@ public class TOS737800 extends JFrame {
 		
 		frame.setJMenuBar( mbar );
 		
+		// input fields
+		
+		JTextField Ftemp = new JTextField();
+		JTextField Fpres = new JTextField();
+		JTextField Felev = new JTextField();
+		JTextField Farwy = new JTextField();
+		JTextField Fwght = new JTextField();
+		
+		// build input panel
+		
+		JPanel inputs = new JPanel();
+		
+		// build output panel
+		
+		JPanel outputs = new JPanel();
+		
+		// build grid layout
+		
+		frame.setLayout( new BorderLayout() );
+		
+		frame.add( inputs, BorderLayout.LINE_START );
+		
+		frame.add( outputs, BorderLayout.LINE_END );
+		
+		frame.add(
+			new JLabel( "<html>" +
+				"<p style='padding: 6px; color: red;'>Do not use for real life flight! Valid for flight simulation use only!</p>" +
+			"</html>", SwingConstants.CENTER ),
+			BorderLayout.PAGE_END
+		);
+		
 		// action listener
 		
 		help.addActionListener( e-> {
@@ -169,6 +200,7 @@ public class TOS737800 extends JFrame {
 		// build frame
 		
 		frame.setTitle( "Boeing 737-800 takeoff speed calculator" );
+		frame.setDefaultCloseOperation( frame.EXIT_ON_CLOSE );
 		frame.setSize( 600, 400 );
 		frame.setResizable( false );
 		frame.setLocation( 50, 50 );
