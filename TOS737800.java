@@ -1,5 +1,6 @@
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.*;
 import java.util.Scanner;
 import java.net.URI;
 
@@ -130,19 +131,66 @@ public class TOS737800 extends JFrame {
 		
 		// input fields
 		
-		JTextField Ftemp = new JTextField();
-		JTextField Fpres = new JTextField();
-		JTextField Felev = new JTextField();
-		JTextField Farwy = new JTextField();
-		JTextField Fwght = new JTextField();
+		JSpinner Ftemp = new JSpinner( new SpinnerNumberModel( 20, -90, 90, 0.2 ) );
+		JSpinner Fpres = new JSpinner( new SpinnerNumberModel( 29.92, 20, 40, 0.02 ) );
+		JSpinner Felev = new JSpinner( new SpinnerNumberModel( 0, -1000, 20000, 5 ) );
+		JSpinner Farwy = new JSpinner( new SpinnerNumberModel( 6500, 2000, 20000, 10 ) );
+		JSpinner Fwght = new JSpinner( new SpinnerNumberModel( 35000, 20000, 70000, 10 ) );
+		JComboBox Fflps = new JComboBox( new String[] { "1", "5", "15" } );
+		JCheckBox Fwrwy = new JCheckBox( "yes" );
 		
 		// build input panel
 		
 		JPanel inputs = new JPanel();
+		inputs.setLayout( new GridLayout( 0, 2, 15, 15 ) );
+		inputs.setBorder( new EmptyBorder( 15, 20, 15, 20 ) );
+		
+		inputs.add( new JLabel( "temperature (°C)" ) );
+		inputs.add( Ftemp );
+		inputs.add( new JLabel( "pressure (inHg)" ) );
+		inputs.add( Fpres );
+		inputs.add( new JLabel( "elevation (ft)" ) );
+		inputs.add( Felev );
+		inputs.add( new JLabel( "available runway (ft)" ) );
+		inputs.add( Farwy );
+		inputs.add( new JLabel( "weight (kg)" ) );
+		inputs.add( Fwght );
+		inputs.add( new JLabel( "Flaps position" ) );
+		inputs.add( Fflps );
+		inputs.add( new JLabel( "Wet runway?" ) );
+		inputs.add( Fwrwy );
+		
+		// build output fields
+		
+		JTextField outV1 = new JTextField();
+		outV1.setBackground( new Color( 255, 180, 180 ) );
+		JTextField outVr = new JTextField();
+		outVr.setBackground( new Color( 140, 220, 140 ) );
+		JTextField outV2 = new JTextField();
+		outV2.setBackground( new Color( 255, 255, 140 ) );
+		
+		JButton calcNow = new JButton( "calculate" );
+		JButton restNow = new JButton( "reset" );
 		
 		// build output panel
 		
-		JPanel outputs = new JPanel();
+		JPanel output = new JPanel();
+		output.setLayout( new GridLayout( 0, 2, 15, 15 ) );
+		output.setBorder( new EmptyBorder( 15, 20, 15, 20 ) );
+		
+		output.add( new JLabel( "<html>v<sub>1</sub></html>" ) );
+		output.add( outV1 );
+		output.add( new JLabel( "<html>v<sub>r</sub></html>" ) );
+		output.add( outVr );
+		output.add( new JLabel( "<html>v<sub>2</sub></html>" ) );
+		output.add( outV2 );
+		
+		output.add( calcNow );
+		output.add( restNow );
+		
+		for( int i = 0; i < 6; i++ ) {
+			output.add( new JLabel( " " ) );
+		}
 		
 		// build grid layout
 		
@@ -150,11 +198,13 @@ public class TOS737800 extends JFrame {
 		
 		frame.add( inputs, BorderLayout.LINE_START );
 		
-		frame.add( outputs, BorderLayout.LINE_END );
+		frame.add( output, BorderLayout.LINE_END );
 		
 		frame.add(
 			new JLabel( "<html>" +
-				"<p style='padding: 6px; color: red;'>Do not use for real life flight! Valid for flight simulation use only!</p>" +
+				"<p style='padding: 6px; color: red; font-size: 1.1em;'>" +
+					"Do not use for real life flight! Valid for flight simulation use only!" +
+				"</p>" +
 			"</html>", SwingConstants.CENTER ),
 			BorderLayout.PAGE_END
 		);
