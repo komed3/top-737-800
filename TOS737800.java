@@ -251,8 +251,8 @@ public class TOS737800 extends JFrame {
 		// build input panel
 		
 		JPanel inputs = new JPanel();
-		inputs.setLayout( new GridLayout( 0, 2, 15, 15 ) );
-		inputs.setBorder( new EmptyBorder( 15, 20, 15, 20 ) );
+		inputs.setLayout( new GridLayout( 0, 2, 10, 10 ) );
+		inputs.setBorder( new EmptyBorder( 20, 20, 10, 20 ) );
 		
 		inputs.add( new JLabel( "temperature (°C)" ) );
 		inputs.add( spinner[0] );
@@ -271,16 +271,17 @@ public class TOS737800 extends JFrame {
 		
 		// build output fields
 		
-		speeds[0] = new JTextField();
-		speeds[0].setEditable( false );
+		for( int i = 0; i < 3; i++ ) {
+			
+			speeds[ i ] = new JTextField();
+			speeds[ i ].setEditable( false );
+			speeds[ i ].setHorizontalAlignment( SwingConstants.RIGHT );
+			speeds[ i ].setFont( speeds[ i ].getFont().deriveFont( Font.BOLD, 14f ) );
+			
+		}
+		
 		speeds[0].setBackground( new Color( 255, 180, 180 ) );
-		
-		speeds[1] = new JTextField();
-		speeds[1].setEditable( false );
 		speeds[1].setBackground( new Color( 140, 220, 140 ) );
-		
-		speeds[2] = new JTextField();
-		speeds[2].setEditable( false );
 		speeds[2].setBackground( new Color( 255, 255, 140 ) );
 		
 		JButton calcBtn = new JButton( "calculate" );
@@ -289,14 +290,14 @@ public class TOS737800 extends JFrame {
 		// build output panel
 		
 		JPanel output = new JPanel();
-		output.setLayout( new GridLayout( 0, 2, 15, 15 ) );
-		output.setBorder( new EmptyBorder( 15, 20, 15, 20 ) );
+		output.setLayout( new GridLayout( 0, 2, 10, 10 ) );
+		output.setBorder( new EmptyBorder( 20, 10, 20, 20 ) );
 		
-		output.add( new JLabel( "<html>v<sub>1</sub></html>" ) );
+		output.add( new JLabel( "<html><b>V<sub>1</sub></b></html>" ) );
 		output.add( speeds[0] );
-		output.add( new JLabel( "<html>v<sub>r</sub></html>" ) );
+		output.add( new JLabel( "<html><b>V<sub>R</sub></b></html>" ) );
 		output.add( speeds[1] );
-		output.add( new JLabel( "<html>v<sub>2</sub></html>" ) );
+		output.add( new JLabel( "<html><b>V<sub>2</sub></b></html>" ) );
 		output.add( speeds[2] );
 		
 		output.add( calcBtn );
@@ -306,6 +307,18 @@ public class TOS737800 extends JFrame {
 			output.add( new JLabel( " " ) );
 		}
 		
+		// disclaimer
+		
+		JLabel disclaimer = new JLabel(
+			"Do not use for real life flight! " +
+				"Valid for flight simulation use only!",
+			SwingConstants.CENTER
+		);
+		
+		disclaimer.setForeground( Color.RED );
+		disclaimer.setFont( disclaimer.getFont().deriveFont( Font.BOLD, 14f ) );
+		disclaimer.setBorder( new EmptyBorder( 5, 0, 20, 0 ) );
+		
 		// build grid layout
 		
 		frame.setLayout( new BorderLayout() );
@@ -314,15 +327,7 @@ public class TOS737800 extends JFrame {
 		
 		frame.add( output, BorderLayout.LINE_END );
 		
-		frame.add(
-			new JLabel( "<html>" +
-				"<p style='padding: 10px; color: red;'>" +
-					"Do not use for real life flight! " +
-					"Valid for flight simulation use only!" +
-				"</p>" +
-			"</html>", SwingConstants.CENTER ),
-			BorderLayout.PAGE_END
-		);
+		frame.add( disclaimer, BorderLayout.PAGE_END );
 		
 		// action listener
 		
