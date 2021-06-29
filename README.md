@@ -1,6 +1,10 @@
 # Boeing 737-800 take off speed calculator
 
-Calculate take off speed for Boeing 737-800.
+Calculate take off speed for Boeing 737-800:
+
+- __v1__: maximum speed up to which a start abort may be initiated
+- __vr__: speed when pilot lifts nose of aircraft to take off
+- __v2__: minimum speed to climb safely even with engine failure
 
 __Do not use for real life flight! Valid for flight simulation use only!__
 
