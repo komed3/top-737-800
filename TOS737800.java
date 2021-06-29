@@ -1,12 +1,24 @@
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import java.util.Scanner;
 import java.net.URI;
 
+/* 
+ * Boeing 737-800 take off speed calculator
+ * 
+ * author	komed3 (Paul Koehler)
+ * web		https://labs.komed3.de
+ * date		2021-06-29
+ * version	1.01
+ * license	MIT
+ * code		https://github.com/komed3/tos-737-800/
+ * 
+ * Do not use for real life flight!
+ * Valid for flight simulation use only!
+ * 
+ */
+
 public class TOS737800 extends JFrame {
-	
-	static Scanner s = new Scanner( System.in );
 	
 	// take off preference tables
 	
@@ -111,6 +123,8 @@ public class TOS737800 extends JFrame {
 	
 	static JTextField[] speeds = new JTextField[3];
 	
+	// reset
+	
 	private static void reset() {
 		
 		spinner[0].setValue( 20 );
@@ -127,6 +141,72 @@ public class TOS737800 extends JFrame {
 		speeds[2].setText( "" );
 		
 	}
+	
+	// calculate
+	
+	private static void calculate() {
+		
+		double temp = ( (Number) spinner[0].getValue() ).doubleValue();
+		double pres = ( (Number) spinner[1].getValue() ).doubleValue();
+		int elev = ( (Number) spinner[2].getValue() ).intValue();
+		int arwy = ( (Number) spinner[3].getValue() ).intValue();
+		int wght = ( (Number) spinner[4].getValue() ).intValue();
+		int flps = combos[0].getSelectedIndex();
+		
+		// calculate preference
+		
+		int psal = (int) Math.min( 9, Math.max( 0,
+			Math.ceil( ( elev + 1000 * ( 29.92 - pres ) ) / 1000 )
+		) );
+		
+		int tmpc = (int) Math.min( 7, Math.max( 1,
+			Math.floor( temp / 10 )
+		) ) - 1;
+		
+		int Xpref = pref[ psal ][ tmpc ];
+		
+		if( Xpref == -1 ) {
+			
+			// ERROR
+		
+		} else {
+			
+			// calculate v speeds
+			
+			int wt1t = (int) Math.ceil( wght / 5000 ) - 1;
+			
+			int[] Xvspd = new int[3];
+			Xvspd[0] = v1[ Xpref ][ flps ][ wt1t ];
+			Xvspd[1] = vr[ Xpref ][ flps ][ wt1t ];
+			Xvspd[2] = v2[ Xpref ][ flps ][ wt1t ];
+			
+			if( Xvspd[0] == -1 || Xvspd[1] == -1 || Xvspd[2] == -1 ) {
+				
+				// ERROR
+				
+			} else {
+				
+				if( checks[0].isSelected() ) {
+					
+					int ar1t = (int) Math.min( 7, Math.max( 0,
+						Math.floor( arwy / 2000 )
+					) );
+					
+					Xvspd[0] -= v1reduc[ flps ][ ar1t ];
+					
+				}
+				
+				speeds[0].setText( Xvspd[0] + " kts" );
+				speeds[1].setText( Xvspd[1] + " kts" );
+				speeds[2].setText( Xvspd[2] + " kts" );
+				
+			}
+				
+		}
+		
+	}
+	
+	// run program
 	
 	public static void main( String[] args ) {
 		
@@ -237,13 +317,26 @@ public class TOS737800 extends JFrame {
 		frame.add(
 			new JLabel( "<html>" +
 				"<p style='padding: 10px; color: red;'>" +
-					"Do not use for real life flight! Valid for flight simulation use only!" +
+					"Do not use for real life flight! " +
+					"Valid for flight simulation use only!" +
 				"</p>" +
 			"</html>", SwingConstants.CENTER ),
 			BorderLayout.PAGE_END
 		);
 		
 		// action listener
+		
+		calc.addActionListener( e -> {
+			
+			calculate();
+			
+		} );
+		
+		calcBtn.addActionListener( e -> {
+			
+			calculate();
+			
+		} );
 		
 		reset.addActionListener( e -> {
 			
