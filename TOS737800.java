@@ -10,6 +10,8 @@ public class TOS737800 extends JFrame {
 	
 	// take off preference tables
 	
+	static String[] flpsPos = { "1", "5", "15" };
+	
 	static int[][] pref = {
 		{  0,  0,  0,  1,  2,  3,  4 },
 		{  0,  0,  0,  1,  2,  3,  4 },
@@ -101,6 +103,20 @@ public class TOS737800 extends JFrame {
 		{  0,  0, 12,  8,  6,  4,  3,  2 }
 	};
 	
+	// input/output fields
+	
+	static JSpinner[] spinner = new JSpinner[5];
+	static JComboBox[] combos = new JComboBox[1];
+	static JCheckBox[] checks = new JCheckBox[1];
+	
+	static JTextField[] speeds = new JTextField[3];
+	
+	private static void reset() {
+		
+		
+		
+	}
+	
 	public static void main( String[] args ) {
 		
 		TOS737800 frame = new TOS737800();
@@ -109,7 +125,7 @@ public class TOS737800 extends JFrame {
 		
 		JMenuItem calc = new JMenuItem( "Calculate" );
 		JMenuItem reset = new JMenuItem( "Reset" );
-		JMenuItem help = new JMenuItem( "Help" );
+		JMenuItem readme = new JMenuItem( "Help" );
 		JMenuItem code = new JMenuItem( "Source code" );
 		JMenuItem donate = new JMenuItem( "Donate" );
 		JMenuItem close = new JMenuItem( "Close" );
@@ -118,26 +134,28 @@ public class TOS737800 extends JFrame {
 		menu.add( calc );
 		menu.add( reset );
 		menu.addSeparator();
-		menu.add( help );
-		menu.add( code );
-		menu.add( donate );
-		menu.addSeparator();
 		menu.add( close );
+		
+		JMenu help = new JMenu( "Help" );
+		help.add( readme );
+		help.add( code );
+		help.add( donate );
 		
 		JMenuBar mbar = new JMenuBar();
 		mbar.add( menu );
+		mbar.add( help );
 		
 		frame.setJMenuBar( mbar );
 		
 		// input fields
 		
-		JSpinner Ftemp = new JSpinner( new SpinnerNumberModel( 20, -90, 90, 0.2 ) );
-		JSpinner Fpres = new JSpinner( new SpinnerNumberModel( 29.92, 20, 40, 0.02 ) );
-		JSpinner Felev = new JSpinner( new SpinnerNumberModel( 0, -1000, 20000, 5 ) );
-		JSpinner Farwy = new JSpinner( new SpinnerNumberModel( 6500, 2000, 20000, 10 ) );
-		JSpinner Fwght = new JSpinner( new SpinnerNumberModel( 35000, 20000, 70000, 10 ) );
-		JComboBox Fflps = new JComboBox( new String[] { "1", "5", "15" } );
-		JCheckBox Fwrwy = new JCheckBox( "yes" );
+		spinner[0] = new JSpinner( new SpinnerNumberModel( 20, -90, 90, 0.2 ) );
+		spinner[1] = new JSpinner( new SpinnerNumberModel( 29.92, 20, 40, 0.02 ) );
+		spinner[2] = new JSpinner( new SpinnerNumberModel( 0, -1000, 20000, 5 ) );
+		spinner[3] = new JSpinner( new SpinnerNumberModel( 6500, 2000, 20000, 10 ) );
+		spinner[4] = new JSpinner( new SpinnerNumberModel( 35000, 20000, 70000, 10 ) );
+		combos[0] = new JComboBox( flpsPos );
+		checks[0] = new JCheckBox( "yes" );
 		
 		// build input panel
 		
@@ -146,28 +164,30 @@ public class TOS737800 extends JFrame {
 		inputs.setBorder( new EmptyBorder( 15, 20, 15, 20 ) );
 		
 		inputs.add( new JLabel( "temperature (°C)" ) );
-		inputs.add( Ftemp );
+		inputs.add( spinner[0] );
 		inputs.add( new JLabel( "pressure (inHg)" ) );
-		inputs.add( Fpres );
+		inputs.add( spinner[1] );
 		inputs.add( new JLabel( "elevation (ft)" ) );
-		inputs.add( Felev );
+		inputs.add( spinner[2] );
 		inputs.add( new JLabel( "available runway (ft)" ) );
-		inputs.add( Farwy );
+		inputs.add( spinner[3] );
 		inputs.add( new JLabel( "weight (kg)" ) );
-		inputs.add( Fwght );
+		inputs.add( spinner[4] );
 		inputs.add( new JLabel( "Flaps position" ) );
-		inputs.add( Fflps );
+		inputs.add( combos[0] );
 		inputs.add( new JLabel( "Wet runway?" ) );
-		inputs.add( Fwrwy );
+		inputs.add( checks[0] );
 		
 		// build output fields
 		
-		JTextField outV1 = new JTextField();
-		outV1.setBackground( new Color( 255, 180, 180 ) );
-		JTextField outVr = new JTextField();
-		outVr.setBackground( new Color( 140, 220, 140 ) );
-		JTextField outV2 = new JTextField();
-		outV2.setBackground( new Color( 255, 255, 140 ) );
+		speeds[0] = new JTextField();
+		speeds[0].setBackground( new Color( 255, 180, 180 ) );
+		
+		speeds[1] = new JTextField();
+		speeds[1].setBackground( new Color( 140, 220, 140 ) );
+		
+		speeds[2] = new JTextField();
+		speeds[2].setBackground( new Color( 255, 255, 140 ) );
 		
 		JButton calcNow = new JButton( "calculate" );
 		JButton restNow = new JButton( "reset" );
@@ -179,11 +199,11 @@ public class TOS737800 extends JFrame {
 		output.setBorder( new EmptyBorder( 15, 20, 15, 20 ) );
 		
 		output.add( new JLabel( "<html>v<sub>1</sub></html>" ) );
-		output.add( outV1 );
+		output.add( speeds[0] );
 		output.add( new JLabel( "<html>v<sub>r</sub></html>" ) );
-		output.add( outVr );
+		output.add( speeds[1] );
 		output.add( new JLabel( "<html>v<sub>2</sub></html>" ) );
-		output.add( outV2 );
+		output.add( speeds[2] );
 		
 		output.add( calcNow );
 		output.add( restNow );
@@ -211,7 +231,7 @@ public class TOS737800 extends JFrame {
 		
 		// action listener
 		
-		help.addActionListener( e-> {
+		readme.addActionListener( e-> {
 			
 			try {
 				
@@ -249,7 +269,7 @@ public class TOS737800 extends JFrame {
 		
 		// build frame
 		
-		frame.setTitle( "Boeing 737-800 takeoff speed calculator" );
+		frame.setTitle( "Boeing 737-800 take off speed calculator" );
 		frame.setDefaultCloseOperation( frame.EXIT_ON_CLOSE );
 		frame.setSize( 600, 400 );
 		frame.setResizable( false );
