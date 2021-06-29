@@ -123,6 +123,19 @@ public class TOS737800 extends JFrame {
 	
 	static JTextField[] speeds = new JTextField[3];
 	
+	// error msg
+	
+	private static void error( String msg ) {
+		
+		JOptionPane.showMessageDialog(
+			null, msg, "ERROR",
+			JOptionPane.INFORMATION_MESSAGE
+		);
+		
+		reset();
+		
+	}
+	
 	// reset
 	
 	private static void reset() {
@@ -146,6 +159,8 @@ public class TOS737800 extends JFrame {
 	
 	private static void calculate() {
 		
+		// read out arguments
+		
 		double temp = ( (Number) spinner[0].getValue() ).doubleValue();
 		double pres = ( (Number) spinner[1].getValue() ).doubleValue();
 		int elev = ( (Number) spinner[2].getValue() ).intValue();
@@ -153,55 +168,83 @@ public class TOS737800 extends JFrame {
 		int wght = ( (Number) spinner[4].getValue() ).intValue();
 		int flps = combos[0].getSelectedIndex();
 		
-		// calculate preference
+		// check weight
 		
-		int psal = (int) Math.min( 9, Math.max( 0,
-			Math.ceil( ( elev + 1000 * ( 29.92 - pres ) ) / 1000 )
-		) );
-		
-		int tmpc = (int) Math.min( 7, Math.max( 1,
-			Math.floor( temp / 10 )
-		) ) - 1;
-		
-		int Xpref = pref[ psal ][ tmpc ];
-		
-		if( Xpref == -1 ) {
+		if( wght < 10000 ) {
 			
-			// ERROR
-		
+			error( "Wrong weight input!" );
+			
+		} else if( wght > 65000 ) {
+			
+			error( "Airplane to heavy to flight!" );
+			
 		} else {
 			
-			// calculate v speeds
+			// check runway length
 			
-			int wt1t = (int) Math.ceil( wght / 5000 ) - 1;
-			
-			int[] Xvspd = new int[3];
-			Xvspd[0] = v1[ Xpref ][ flps ][ wt1t ];
-			Xvspd[1] = vr[ Xpref ][ flps ][ wt1t ];
-			Xvspd[2] = v2[ Xpref ][ flps ][ wt1t ];
-			
-			if( Xvspd[0] == -1 || Xvspd[1] == -1 || Xvspd[2] == -1 ) {
+			if( arwy < 4000 ) {
 				
-				// ERROR
+				error( "Runway to short for take off!" );
 				
 			} else {
 				
-				if( checks[0].isSelected() ) {
+				// calculate preference
+				
+				int psal = (int) Math.min( 9, Math.max( 0,
+					Math.ceil( ( elev + 1000 * ( 29.92 - pres ) ) / 1000 )
+				) );
+				
+				int tmpc = (int) Math.min( 7, Math.max( 1,
+					Math.floor( temp / 10 )
+				) ) - 1;
+				
+				int Xpref = pref[ psal ][ tmpc ];
+				
+				if( Xpref == -1 ) {
 					
-					int ar1t = (int) Math.min( 7, Math.max( 0,
-						Math.floor( arwy / 2000 )
-					) );
+					error( "Flight not possible under these conditions!" );
+				
+				} else {
 					
-					Xvspd[0] -= v1reduc[ flps ][ ar1t ];
+					// calculate v speeds
 					
+					int wt1t = (int) Math.ceil( wght / 5000 ) - 1;
+					
+					int[] Xvspd = new int[3];
+					Xvspd[0] = v1[ Xpref ][ flps ][ wt1t ];
+					Xvspd[1] = vr[ Xpref ][ flps ][ wt1t ];
+					Xvspd[2] = v2[ Xpref ][ flps ][ wt1t ];
+					
+					if( Xvspd[0] == -1 || Xvspd[1] == -1 || Xvspd[2] == -1 ) {
+						
+						error( "Flight not possible under these conditions!" );
+						
+					} else {
+						
+						// check wet runway
+						
+						if( checks[0].isSelected() ) {
+							
+							int ar1t = (int) Math.min( 7, Math.max( 0,
+								Math.floor( arwy / 2000 )
+							) );
+							
+							Xvspd[0] -= v1reduc[ flps ][ ar1t ];
+							
+						}
+						
+						// output v speeds
+						
+						speeds[0].setText( Xvspd[0] + " kts" );
+						speeds[1].setText( Xvspd[1] + " kts" );
+						speeds[2].setText( Xvspd[2] + " kts" );
+						
+					}
+						
 				}
 				
-				speeds[0].setText( Xvspd[0] + " kts" );
-				speeds[1].setText( Xvspd[1] + " kts" );
-				speeds[2].setText( Xvspd[2] + " kts" );
-				
 			}
-				
+			
 		}
 		
 	}

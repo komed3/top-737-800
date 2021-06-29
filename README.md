@@ -4,7 +4,7 @@ Calculate take off speed for Boeing 737-800.
 
 __Do not use for real life flight! Valid for flight simulation use only!__
 
-![Screenshot of the calculator](https://github.com/komed3/tos-737-800/blob/main/TOS-737-800.png?raw=true)
+![Screenshot of the calculator](https://github.com/komed3/tos-737-800/blob/main/screenshot01.png?raw=true)
 
 ## Required arguments
 
