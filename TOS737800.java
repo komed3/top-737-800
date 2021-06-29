@@ -110,7 +110,7 @@ public class TOS737800 extends JFrame {
 		JMenuItem calc = new JMenuItem( "Calculate" );
 		JMenuItem reset = new JMenuItem( "Reset" );
 		JMenuItem help = new JMenuItem( "Help" );
-		JMenuItem code = new JMenuItem( "Source Code" );
+		JMenuItem code = new JMenuItem( "Source code" );
 		JMenuItem donate = new JMenuItem( "Donate" );
 		JMenuItem close = new JMenuItem( "Close" );
 		
@@ -202,7 +202,7 @@ public class TOS737800 extends JFrame {
 		
 		frame.add(
 			new JLabel( "<html>" +
-				"<p style='padding: 6px; color: red; font-size: 1.1em;'>" +
+				"<p style='padding: 10px; color: red;'>" +
 					"Do not use for real life flight! Valid for flight simulation use only!" +
 				"</p>" +
 			"</html>", SwingConstants.CENTER ),
@@ -253,7 +253,7 @@ public class TOS737800 extends JFrame {
 		frame.setDefaultCloseOperation( frame.EXIT_ON_CLOSE );
 		frame.setSize( 600, 400 );
 		frame.setResizable( false );
-		frame.setLocation( 50, 50 );
+		frame.setLocationRelativeTo( null );
 		frame.setVisible( true );
 		
 	}
