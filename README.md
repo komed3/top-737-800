@@ -25,3 +25,9 @@ __Do not use for real life flight! Valid for flight simulation use only!__
 Download and install __jdk__ and run the following command: ``javac TOS737800.java``
 
 After that you can execute the program with: ``java TOS737800``
+
+## Data source
+
+![take off speeds](https://github.com/komed3/tos-737-800/blob/main/perf_takeoff.gif?raw=true)
+
+URL: [b737.org.uk](http://www.b737.org.uk/pilotnotes.htm)
