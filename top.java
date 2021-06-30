@@ -264,7 +264,7 @@ public class top extends JFrame {
 				
 				// calculate v speeds
 				
-				int wt1t = (int) Math.ceil( wght / 5000 ) - 1;
+				int wt1t = (int) Math.ceil( wght / 5000 );
 				
 				int[] Xvspd = new int[3];
 				Xvspd[0] = v1[ Xpref ][ flps ][ wt1t ];
