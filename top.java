@@ -131,7 +131,7 @@ public class top extends JFrame {
 		
 		String msg = "<html>" +
 			"<b>Boeing 737-800 takeoff performence calculator</b><br />" +
-			"Author: komed3 (Paul Köhler)<br />" +
+			"Author: komed3 (Paul K\u00F6hler)<br />" +
 			"Version: 1.02<br />" +
 			"Date: 2021-06-30<br />" +
 			"License: MIT<br />" +
@@ -360,7 +360,7 @@ public class top extends JFrame {
 		inputs.setLayout( new GridLayout( 0, 2, 10, 10 ) );
 		inputs.setBorder( new EmptyBorder( 20, 20, 10, 20 ) );
 		
-		inputs.add( new JLabel( "temperature (°C)" ) );
+		inputs.add( new JLabel( "temperature (\u00B0C)" ) );
 		inputs.add( spinner[0] );
 		inputs.add( new JLabel( "pressure (inHg)" ) );
 		inputs.add( spinner[1] );
