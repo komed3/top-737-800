@@ -18,7 +18,7 @@ import java.net.URI;
  * 
  */
 
-public class TOS737800 extends JFrame {
+public class top extends JFrame {
 	
 	// take off preference tables
 	
@@ -133,6 +133,18 @@ public class TOS737800 extends JFrame {
 		);
 		
 		reset();
+		
+	}
+	
+	// URL opener
+	
+	private static void openURL( String url ) {
+		
+		try {
+			
+			Desktop.getDesktop().browse( new URI( url ) );
+			
+		} catch( Exception e ) {}
 		
 	}
 	
@@ -374,65 +386,21 @@ public class TOS737800 extends JFrame {
 		
 		// action listener
 		
-		calc.addActionListener( e -> {
-			
-			calculate();
-			
-		} );
+		calc.addActionListener( e -> { calculate(); } );
 		
-		calcBtn.addActionListener( e -> {
-			
-			calculate();
-			
-		} );
+		calcBtn.addActionListener( e -> { calculate(); } );
 		
-		reset.addActionListener( e -> {
-			
-			reset();
-			
-		} );
+		reset.addActionListener( e -> { reset(); } );
 		
-		resetBtn.addActionListener( e -> {
-			
-			reset();
-			
-		} );
+		resetBtn.addActionListener( e -> { reset(); } );
 		
-		readme.addActionListener( e -> {
-			
-			try {
-				
-				Desktop.getDesktop().browse( new URI( "https://github.com/komed3/tos-737-800/blob/main/README.md" ) );
-				
-			} catch( Exception except ) {}
-			
-		} );
+		readme.addActionListener( e -> { openURL( "https://github.com/komed3/tos-737-800/blob/main/README.md" ); } );
 		
-		code.addActionListener( e -> {
-			
-			try {
-				
-				Desktop.getDesktop().browse( new URI( "https://github.com/komed3/tos-737-800/" ) );
-				
-			} catch( Exception except ) {}
-			
-		} );
+		code.addActionListener( e -> { openURL( "https://github.com/komed3/tos-737-800/" ); } );
 		
-		donate.addActionListener( e -> {
-			
-			try {
-				
-				Desktop.getDesktop().browse( new URI( "https://paypal.me/komed3/" ) );
-				
-			} catch( Exception except ) {}
-			
-		} );
+		donate.addActionListener( e -> { openURL( "https://paypal.me/komed3/" ) } );
 		
-		close.addActionListener( e -> {
-			
-			frame.dispose();
-			
-		} );
+		close.addActionListener( e -> { frame.dispose(); } );
 		
 		// build frame
 		
