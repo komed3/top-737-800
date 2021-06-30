@@ -8,7 +8,7 @@ import java.net.URI;
  * 
  * author	komed3 (Paul Koehler)
  * web		https://labs.komed3.de
- * date		2021-06-29
+ * date		2021-06-30
  * version	1.01
  * license	MIT
  * code		https://github.com/komed3/tos-737-800/
@@ -18,7 +18,7 @@ import java.net.URI;
  * 
  */
 
-public class TOS737800 extends JFrame {
+public class top extends JFrame {
 	
 	// take off preference tables
 	
@@ -123,16 +123,76 @@ public class TOS737800 extends JFrame {
 	
 	static JTextField[] speeds = new JTextField[3];
 	
+	static ImageIcon fico;
+	
+	// info msg
+	
+	private static void infomsg() {
+		
+		String msg = "<html>" +
+			"<b>Boeing 737-800 takeoff performence calculator</b><br />" +
+			"Author: komed3 (Paul Köhler)<br />" +
+			"Version: 1.02<br />" +
+			"Date: 2021-06-30<br />" +
+			"License: MIT<br />" +
+			"<p style=\"color: red;\">" +
+				"Do not use for real life flight!<br />" +
+				"Valid for flight simulation use only!" +
+			"</p>" +
+		"</html>";
+		
+		JOptionPane.showMessageDialog(
+			null, msg, "INFO",
+			JOptionPane.INFORMATION_MESSAGE
+		);
+		
+		reset();
+		
+	}
+	
 	// error msg
 	
 	private static void error( String msg ) {
 		
 		JOptionPane.showMessageDialog(
 			null, msg, "ERROR",
-			JOptionPane.INFORMATION_MESSAGE
+			JOptionPane.ERROR_MESSAGE
 		);
 		
 		reset();
+		
+	}
+	
+	// URL opener
+	
+	private static void openURL( String url ) {
+		
+		try {
+			
+			Desktop.getDesktop().browse( new URI( url ) );
+			
+		} catch( Exception e ) {}
+		
+	}
+	
+	// takeoff perf
+	
+	private static void toperf() {
+		
+		JFrame topf = new JFrame();
+		
+		ImageIcon cimg = new ImageIcon(
+			top.class.getResource( "resources/perf_takeoff.gif" )
+		);
+		
+		topf.add( new JLabel( cimg ) );
+		
+		topf.setTitle( "takeoff performence charts" );
+		topf.setSize( cimg.getIconWidth(), cimg.getIconHeight() );
+		topf.setIconImage( fico.getImage() );
+		topf.setResizable( false );
+		topf.setLocationRelativeTo( null );
+		topf.setVisible( true );
 		
 	}
 	
@@ -143,8 +203,8 @@ public class TOS737800 extends JFrame {
 		spinner[0].setValue( 20 );
 		spinner[1].setValue( 29.92 );
 		spinner[2].setValue( 0 );
-		spinner[3].setValue( 6500 );
-		spinner[4].setValue( 35000 );
+		spinner[3].setValue( 9200 );
+		spinner[4].setValue( 50000 );
 		
 		combos[0].setSelectedItem( flpsPos[0] );
 		checks[0].setSelected( false );
@@ -170,79 +230,73 @@ public class TOS737800 extends JFrame {
 		
 		// check weight
 		
-		if( wght < 10000 ) {
+		if( wght < 41413 ) {
 			
-			error( "Wrong weight input!" );
+			error( "Boeing 737-800 empty weight is 41'413 kg!" );
 			
 		} else if( wght > 65000 ) {
 			
 			error( "Airplane to heavy to flight!" );
 			
+		} else if( arwy < 6900 ) {
+			
+			error( "Runway length must be at least 6'900 ft!" );
+			
 		} else {
 			
-			// check runway length
+			// calculate preference
 			
-			if( arwy < 4000 ) {
+			int psal = (int) Math.min( 9, Math.max( 0,
+				Math.ceil( ( elev + 1000 * ( 29.92 - pres ) ) / 1000 )
+			) );
+			
+			int tmpc = (int) Math.min( 7, Math.max( 1,
+				Math.floor( temp / 10 )
+			) ) - 1;
+			
+			int Xpref = pref[ psal ][ tmpc ];
+			
+			if( Xpref == -1 ) {
 				
-				error( "Runway to short for take off!" );
-				
+				error( "Flight not possible under these conditions!" );
+			
 			} else {
 				
-				// calculate preference
+				// calculate v speeds
 				
-				int psal = (int) Math.min( 9, Math.max( 0,
-					Math.ceil( ( elev + 1000 * ( 29.92 - pres ) ) / 1000 )
-				) );
+				int wt1t = (int) Math.ceil( wght / 5000 ) - 1;
 				
-				int tmpc = (int) Math.min( 7, Math.max( 1,
-					Math.floor( temp / 10 )
-				) ) - 1;
+				int[] Xvspd = new int[3];
+				Xvspd[0] = v1[ Xpref ][ flps ][ wt1t ];
+				Xvspd[1] = vr[ Xpref ][ flps ][ wt1t ];
+				Xvspd[2] = v2[ Xpref ][ flps ][ wt1t ];
 				
-				int Xpref = pref[ psal ][ tmpc ];
-				
-				if( Xpref == -1 ) {
+				if( Xvspd[0] == -1 || Xvspd[1] == -1 || Xvspd[2] == -1 ) {
 					
 					error( "Flight not possible under these conditions!" );
-				
+					
 				} else {
 					
-					// calculate v speeds
+					// check wet runway
 					
-					int wt1t = (int) Math.ceil( wght / 5000 ) - 1;
-					
-					int[] Xvspd = new int[3];
-					Xvspd[0] = v1[ Xpref ][ flps ][ wt1t ];
-					Xvspd[1] = vr[ Xpref ][ flps ][ wt1t ];
-					Xvspd[2] = v2[ Xpref ][ flps ][ wt1t ];
-					
-					if( Xvspd[0] == -1 || Xvspd[1] == -1 || Xvspd[2] == -1 ) {
+					if( checks[0].isSelected() ) {
 						
-						error( "Flight not possible under these conditions!" );
+						int ar1t = (int) Math.min( 7, Math.max( 0,
+							Math.floor( arwy / 2000 )
+						) );
 						
-					} else {
-						
-						// check wet runway
-						
-						if( checks[0].isSelected() ) {
-							
-							int ar1t = (int) Math.min( 7, Math.max( 0,
-								Math.floor( arwy / 2000 )
-							) );
-							
-							Xvspd[0] -= v1reduc[ flps ][ ar1t ];
-							
-						}
-						
-						// output v speeds
-						
-						speeds[0].setText( Xvspd[0] + " kts" );
-						speeds[1].setText( Xvspd[1] + " kts" );
-						speeds[2].setText( Xvspd[2] + " kts" );
+						Xvspd[0] -= v1reduc[ flps ][ ar1t ];
 						
 					}
-						
+					
+					// output v speeds
+					
+					speeds[0].setText( Xvspd[0] + " kts" );
+					speeds[1].setText( Xvspd[1] + " kts" );
+					speeds[2].setText( Xvspd[2] + " kts" );
+					
 				}
-				
+					
 			}
 			
 		}
@@ -253,13 +307,19 @@ public class TOS737800 extends JFrame {
 	
 	public static void main( String[] args ) {
 		
-		TOS737800 frame = new TOS737800();
+		top frame = new top();
+		
+		fico = new ImageIcon(
+			top.class.getResource( "resources/icon.png" )
+		);
 		
 		// build menu bar
 		
 		JMenuItem calc = new JMenuItem( "Calculate" );
 		JMenuItem reset = new JMenuItem( "Reset" );
-		JMenuItem readme = new JMenuItem( "Help" );
+		JMenuItem readme = new JMenuItem( "Readme" );
+		JMenuItem info = new JMenuItem( "Info" );
+		JMenuItem chart = new JMenuItem( "Perf. charts" );
 		JMenuItem code = new JMenuItem( "Source code" );
 		JMenuItem donate = new JMenuItem( "Donate" );
 		JMenuItem close = new JMenuItem( "Close" );
@@ -272,6 +332,9 @@ public class TOS737800 extends JFrame {
 		
 		JMenu help = new JMenu( "Help" );
 		help.add( readme );
+		help.add( info );
+		help.add( chart );
+		help.addSeparator();
 		help.add( code );
 		help.add( donate );
 		
@@ -284,10 +347,10 @@ public class TOS737800 extends JFrame {
 		// input fields
 		
 		spinner[0] = new JSpinner( new SpinnerNumberModel( 20, -90, 90, 0.2 ) );
-		spinner[1] = new JSpinner( new SpinnerNumberModel( 29.92, 20, 40, 0.02 ) );
+		spinner[1] = new JSpinner( new SpinnerNumberModel( 29.92, 10, 50, 0.02 ) );
 		spinner[2] = new JSpinner( new SpinnerNumberModel( 0, -1000, 20000, 5 ) );
-		spinner[3] = new JSpinner( new SpinnerNumberModel( 6500, 2000, 20000, 10 ) );
-		spinner[4] = new JSpinner( new SpinnerNumberModel( 35000, 20000, 70000, 10 ) );
+		spinner[3] = new JSpinner( new SpinnerNumberModel( 9200, 0, 35000, 50 ) );
+		spinner[4] = new JSpinner( new SpinnerNumberModel( 50000, 0, 100000, 10 ) );
 		combos[0] = new JComboBox( flpsPos );
 		checks[0] = new JCheckBox( "yes" );
 		
@@ -354,7 +417,7 @@ public class TOS737800 extends JFrame {
 		
 		JLabel disclaimer = new JLabel(
 			"Do not use for real life flight! " +
-				"Valid for flight simulation use only!",
+			"Valid for flight simulation use only!",
 			SwingConstants.CENTER
 		);
 		
@@ -375,71 +438,52 @@ public class TOS737800 extends JFrame {
 		// action listener
 		
 		calc.addActionListener( e -> {
-			
 			calculate();
-			
 		} );
 		
 		calcBtn.addActionListener( e -> {
-			
 			calculate();
-			
 		} );
 		
 		reset.addActionListener( e -> {
-			
 			reset();
-			
 		} );
 		
 		resetBtn.addActionListener( e -> {
-			
 			reset();
-			
+		} );
+		
+		info.addActionListener( e -> {
+			infomsg();
 		} );
 		
 		readme.addActionListener( e -> {
-			
-			try {
-				
-				Desktop.getDesktop().browse( new URI( "https://github.com/komed3/tos-737-800/blob/main/README.md" ) );
-				
-			} catch( Exception except ) {}
-			
+			openURL( "https://github.com/komed3/tos-737-800/blob/main/README.md" );
+		} );
+		
+		chart.addActionListener( e -> {
+			toperf();
 		} );
 		
 		code.addActionListener( e -> {
-			
-			try {
-				
-				Desktop.getDesktop().browse( new URI( "https://github.com/komed3/tos-737-800/" ) );
-				
-			} catch( Exception except ) {}
-			
+			openURL( "https://github.com/komed3/tos-737-800/" );
 		} );
 		
 		donate.addActionListener( e -> {
-			
-			try {
-				
-				Desktop.getDesktop().browse( new URI( "https://paypal.me/komed3/" ) );
-				
-			} catch( Exception except ) {}
-			
+			openURL( "https://paypal.me/komed3/" );
 		} );
 		
 		close.addActionListener( e -> {
-			
 			frame.dispose();
-			
 		} );
 		
 		// build frame
 		
 		reset();
 		
-		frame.setTitle( "Boeing 737-800 take off speed calculator" );
+		frame.setTitle( "Boeing 737-800 takeoff performence calculator" );
 		frame.setDefaultCloseOperation( frame.EXIT_ON_CLOSE );
+		frame.setIconImage( fico.getImage() );
 		frame.setSize( 600, 400 );
 		frame.setResizable( false );
 		frame.setLocationRelativeTo( null );
