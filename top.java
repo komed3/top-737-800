@@ -148,6 +148,26 @@ public class top extends JFrame {
 		
 	}
 	
+	// takeoff perf
+	
+	private static void toperf() {
+		
+		JFrame topf = new JFrame();
+		
+		ImageIcon cimg = new ImageIcon(
+			top.class.getResource( "perf_takeoff.gif" )
+		);
+		
+		topf.add( new JLabel( cimg ) );
+		
+		topf.setTitle( "takeoff performence charts" );
+		topf.setSize( cimg.getIconWidth(), cimg.getIconHeight() );
+		topf.setResizable( false );
+		topf.setLocationRelativeTo( null );
+		topf.setVisible( true );
+		
+	}
+	
 	// reset
 	
 	private static void reset() {
@@ -265,13 +285,14 @@ public class top extends JFrame {
 	
 	public static void main( String[] args ) {
 		
-		TOS737800 frame = new TOS737800();
+		top frame = new top();
 		
 		// build menu bar
 		
 		JMenuItem calc = new JMenuItem( "Calculate" );
 		JMenuItem reset = new JMenuItem( "Reset" );
 		JMenuItem readme = new JMenuItem( "Help" );
+		JMenuItem chart = new JMenuItem( "Perf. charts" );
 		JMenuItem code = new JMenuItem( "Source code" );
 		JMenuItem donate = new JMenuItem( "Donate" );
 		JMenuItem close = new JMenuItem( "Close" );
@@ -284,6 +305,7 @@ public class top extends JFrame {
 		
 		JMenu help = new JMenu( "Help" );
 		help.add( readme );
+		help.add( chart );
 		help.add( code );
 		help.add( donate );
 		
@@ -386,27 +408,47 @@ public class top extends JFrame {
 		
 		// action listener
 		
-		calc.addActionListener( e -> { calculate(); } );
+		calc.addActionListener( e -> {
+			calculate();
+		} );
 		
-		calcBtn.addActionListener( e -> { calculate(); } );
+		calcBtn.addActionListener( e -> {
+			calculate();
+		} );
 		
-		reset.addActionListener( e -> { reset(); } );
+		reset.addActionListener( e -> {
+			reset();
+		} );
 		
-		resetBtn.addActionListener( e -> { reset(); } );
+		resetBtn.addActionListener( e -> {
+			reset();
+		} );
 		
-		readme.addActionListener( e -> { openURL( "https://github.com/komed3/tos-737-800/blob/main/README.md" ); } );
+		readme.addActionListener( e -> {
+			openURL( "https://github.com/komed3/tos-737-800/blob/main/README.md" );
+		} );
 		
-		code.addActionListener( e -> { openURL( "https://github.com/komed3/tos-737-800/" ); } );
+		chart.addActionListener( e -> {
+			toperf();
+		} );
 		
-		donate.addActionListener( e -> { openURL( "https://paypal.me/komed3/" ) } );
+		code.addActionListener( e -> {
+			openURL( "https://github.com/komed3/tos-737-800/" );
+		} );
 		
-		close.addActionListener( e -> { frame.dispose(); } );
+		donate.addActionListener( e -> {
+			openURL( "https://paypal.me/komed3/" );
+		} );
+		
+		close.addActionListener( e -> {
+			frame.dispose();
+		} );
 		
 		// build frame
 		
 		reset();
 		
-		frame.setTitle( "Boeing 737-800 take off speed calculator" );
+		frame.setTitle( "Boeing 737-800 takeoff performence calculator" );
 		frame.setDefaultCloseOperation( frame.EXIT_ON_CLOSE );
 		frame.setSize( 600, 400 );
 		frame.setResizable( false );
