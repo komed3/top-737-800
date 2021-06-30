@@ -125,6 +125,42 @@ public class top extends JFrame {
 	
 	static ImageIcon fico;
 	
+    // help dialog
+    
+    private static void helpdesk() {
+        
+        JFrame helpf = new JFrame();
+		
+		helpf.setLayout( new BorderLayout() );
+        
+        JPanel help1 = new JPanel();
+		help1.setLayout( new GridLayout( 0, 2, 10, 10 ) );
+		help1.setBorder( new EmptyBorder( 20, 20, 10, 20 ) );
+        
+        help1.add( new JLabel( "<html><b>V<sub>1</sub></b></html>" ) );
+        help1.add( new JLabel( "maximum speed up to which a start abort may be initiated" ) );
+        help1.add( new JLabel( "<html><b>V<sub>R</sub></b></html>" ) );
+        help1.add( new JLabel( "speed when pilot lifts nose of aircraft to take off" ) );
+        help1.add( new JLabel( "<html><b>V<sub>2</sub></b></html>" ) );
+        help1.add( new JLabel( "minimum speed to climb safely even with engine failure" ) );
+        help1.add( new JLabel( "inHg" ) );
+        help1.add( new JLabel( "inch of mercury (1 inHg = 33.9 hPa)" ) );
+        help1.add( new JLabel( "minimum runway length" ) );
+        help1.add( new JLabel( "6'900 ft (1 ft = 0.3 m)" ) );
+        help1.add( new JLabel( "empty weight" ) );
+        help1.add( new JLabel( "41'413 kg" ) );
+        
+        helpf.add( help1, BorderLayout.CENTER );
+        
+        helpf.setTitle( "help" );
+		helpf.setIconImage( fico.getImage() );
+		helpf.pack();
+		helpf.setResizable( false );
+		helpf.setLocationRelativeTo( null );
+		helpf.setVisible( true );
+        
+    }
+    
 	// info msg
 	
 	private static void infomsg() {
@@ -317,7 +353,7 @@ public class top extends JFrame {
 		
 		JMenuItem calc = new JMenuItem( "Calculate" );
 		JMenuItem reset = new JMenuItem( "Reset" );
-		JMenuItem readme = new JMenuItem( "Readme" );
+		JMenuItem helpme = new JMenuItem( "Help" );
 		JMenuItem info = new JMenuItem( "Info" );
 		JMenuItem chart = new JMenuItem( "Perf. charts" );
 		JMenuItem code = new JMenuItem( "Source code" );
@@ -331,7 +367,7 @@ public class top extends JFrame {
 		menu.add( close );
 		
 		JMenu help = new JMenu( "Help" );
-		help.add( readme );
+		help.add( helpme );
 		help.add( info );
 		help.add( chart );
 		help.addSeparator();
@@ -457,8 +493,8 @@ public class top extends JFrame {
 			infomsg();
 		} );
 		
-		readme.addActionListener( e -> {
-			openURL( "https://github.com/komed3/tos-737-800/blob/main/README.md" );
+		helpme.addActionListener( e -> {
+			helpdesk();
 		} );
 		
 		chart.addActionListener( e -> {
