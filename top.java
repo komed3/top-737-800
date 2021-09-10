@@ -9,7 +9,7 @@ import java.net.URI;
  * author	komed3 (Paul Koehler)
  * web		https://labs.komed3.de
  * date		2021-06-30
- * version	1.01
+ * version	1.02
  * license	MIT
  * code		https://github.com/komed3/tos-737-800/
  * 
