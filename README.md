@@ -1,6 +1,6 @@
 # Boeing 737-800 take off speed calculator
 
-Calculate take off performence (v1, vr and v2) for Boeing 737-800:
+Calculate take off performance (v1, vr and v2) for Boeing 737-800:
 
 - __v1__: maximum speed up to which a start abort may be initiated
 - __vr__: speed when pilot lifts nose of aircraft to take off
